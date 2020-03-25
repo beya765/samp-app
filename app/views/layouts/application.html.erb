@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    # L3.35
-    <title><%= yield(:title) %> | Ruby on Rails Tutorial Sample App</title>
+    # L3.35 + L4.3
+    <title><%= full_title(yield(:title)) %></title>
     <%= csrf_meta_tags %>
+    # L4.3.4 https://railstutorial.jp/chapters/rails_flavored_ruby?version=5.1#sec-css_revisited
+    # 最後の引数がハッシュの場合、波カッコは省略可能。≒{ media: 'all', data-turbolinks-track: 'reload' }
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
