@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 gem 'rails',        '5.1.6'
 # L5.5: https://railstutorial.jp/chapters/filling_in_the_layout?version=5.1#sec-custom_css
 gem 'bootstrap-sass', '3.3.7' 
+# L6.36: パスワードを適切にハッシュ化
+gem 'bcrypt',         '3.1.12'
 gem 'puma',         '3.9.1'
 gem 'sass-rails',   '5.0.6'
 gem 'uglifier',     '3.2.0'
