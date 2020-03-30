@@ -10,4 +10,7 @@ Rails.application.routes.draw do
   get '/about', to: 'static_pages#about' # /aboutアクセス時の該当アクションと名前付きルートの使用
   get '/contact', to: 'static_pages#contact'
   get '/signup', to: 'users#new'
+  post '/signup', to: 'users#create'
+  # L7.3: Usersリソースを追加(https://railstutorial.jp/chapters/sign_up?version=5.1#sec-a_users_resource)
+  resources :users
 end

@@ -1,0 +1,16 @@
+<!-- L7.21: フォーム送信時にエラーメッセージを表示するためのパーシャル
+  @user.errors.any?: empty?の逆で要素が一つでもあればtrue
+  pluralize: 英語専用のテキストヘルパー、複数形に対応
+-->
+<% if @user.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-danger">
+      The form contains <%= pluralize(@user.errors.count, "error") %>
+    </div>
+    <ul>
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
