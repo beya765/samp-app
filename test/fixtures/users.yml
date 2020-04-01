@@ -1,0 +1,8 @@
+# https://railstutorial.jp/chapters/basic_login?version=5.1#sec-testing_layout_changes
+
+# L8.22: ユーザーログインのテストで使うfixture
+  # User.digest: models/userのクラスメソッド
+michael:
+  name: Michael Example
+  email: michael@example.com
+  password_digest: <%= User.digest('password') %> 

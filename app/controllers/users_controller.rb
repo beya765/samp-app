@@ -14,6 +14,7 @@ class UsersController < ApplicationController
     # ユーザ登録で送られてきたPOSTデータの内容を限定
     @user = User.new(user_params)
     if @user.save
+      log_in @user # L8.25: ユーザー登録中にログインする
       flash[:success] = "userコントローラー: Welcome to the Sample App!!"
       # L7.28: redirect_to user_url(@user)と等価
       redirect_to @user
