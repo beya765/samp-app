@@ -35,12 +35,33 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", user_path(@user)
 
     # L8.31: ユーザーログアウトのテスト
-    delete logout_path
+    delete logout_path # 例: Firefox
     assert_not is_logged_in?
     assert_redirected_to root_url
+    # L9.14: 2番目のウィンドウでログアウトをクリックした場合のシミュレート
+    delete logout_path # 例: Chrome
     follow_redirect!
     assert_select "a[href=?]", login_path
     assert_select "a[href=?]", logout_path,      count: 0
     assert_select "a[href=?]", user_path(@user), count: 0
+  end
+
+  # L9.25: [remember me] チェックボックスのテスト
+  test "login with remembering" do
+    log_in_as(@user, remember_me: '1')
+    # テスト内ではcookiesメソッドにシンボルを使えないため、文字列キー
+    assert_not_empty cookies['remember_token']
+    # L9.28: assigns/インスタンス変数(この場合、sessionコントローラーcreate内@user)に
+    # 対応するシンボルを渡し、仮想のremember_token属性にアクセスできるようにする特殊メソッド
+    assert_equal cookies['remember_token'], assigns(:user).remember_token
+  end
+
+  test "login without remembering" do
+    # クッキーを保持してログイン
+    log_in_as(@user, remember_me: '1')
+    delete logout_path
+    # クッキーを削除してログイン
+    log_in_as(@user, remember_me: '0')
+    assert_empty cookies['remember_token']
   end
 end
