@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
       log_in @user
       # L9.7/9.23:  [remember me] チェックボックスによるユーザー保持(セッションヘルパー呼び出し)
       params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
-      redirect_to @user # user_url(user)
+      redirect_back_or @user # L10.32: フレンドリーフォワーディング
     else
       # flash.now: その後リクエストが発生したときflashが消滅します
       flash.now[:danger] = 'Invalid email/password combination' # 本当は正しくない

@@ -1,0 +1,26 @@
+<!-- L10.5: newとeditフォーム用のパーシャル -->
+
+<!-- L10.3: Active Recordのnew_record?論理値メソッドを使い
+    @user.new_record?でPOSTとPATCHを使い分けている。
+    (PATCHリクエストの方はinputタグによる偽造) -->
+<!-- form_for: Active Recordのオブジェクトを取り込む -->
+<!-- https://railstutorial.jp/chapters/sign_up?version=5.1#sec-the_form_html -->
+<!-- https://railstutorial.jp/chapters/sign_up?version=5.1#sec-a_working_form -->
+<%= form_for(@user, url: yield(:url)) do |f| %>
+  <!-- L7.20: ユーザー登録失敗時にエラーメッセージが表示されるようにする -->
+  <%= render 'shared/error_messages', object: @user %>
+
+  <%= f.label :name %>
+  <%= f.text_field :name, class: 'form-control' %>
+
+  <%= f.label :email %>
+  <%= f.email_field :email, class: 'form-control' %>
+
+  <%= f.label :password %>
+  <%= f.password_field :password, class: 'form-control' %>
+
+  <%= f.label :password_confirmation %>
+  <%= f.password_field :password_confirmation, class: 'form-control' %>
+
+  <%= f.submit yield(:button_text), class: "btn btn-primary" %>
+<% end %>

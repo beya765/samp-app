@@ -12,6 +12,11 @@ module SessionsHelper
     cookies.permanent[:remember_token] = user.remember_token
   end
 
+  # L10.27: 渡されたユーザーがログイン済みユーザーと一緒ならtrueを返す
+  def current_user?(user)
+    user == current_user
+  end
+
   # L9.9: 記憶トークンcookieに対応するユーザーを返す
   def current_user
     # ユーザーID(ローカル変数)に代入(ユーザーIDのセッションが存在)
@@ -54,5 +59,19 @@ module SessionsHelper
     forget(current_user) # L9.12
     session.delete(:user_id)
     @current_user = nil
+  end
+
+  # L10.30: フレンドリーフォワーディングの実装
+
+  # L10.30: 記憶したURL(もしくはデフォルト値)にリダイレクト
+  def redirect_back_or(default)
+    redirect_to(session[:forwarding_url] || default)
+    session.delete(:forwarding_url)
+  end
+
+  # L10.30: アクセスしようとしたURLを覚えておく
+  def store_location
+    # request.original_urlでリクエスト先を取得
+    session[:forwarding_url] = request.original_url if request.get?
   end
 end

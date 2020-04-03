@@ -1,0 +1,26 @@
+<% provide(:title, "All users") %>
+
+<h1>All users</h1>
+
+<!-- L10.45 -->
+<%= will_paginate %>
+
+<ul class="users">
+  <!-- L10.52: indexページの完全なリファクタリング
+  Railsは@usersをUserオブジェクトのリストと推測し、ユーザーの
+  コレクションを与えて呼び出すと、自動的にユーザーのコレクションを
+  列挙し、それぞれのユーザーを_user.html.erbパーシャルで出力します。-->
+  <%= render @users %>
+
+  <% if false %>
+    <!-- L10.3.5にて上記render文にリファクタリング(https://railstutorial.jp/chapters/updating_and_deleting_users?version=5.1#sec-partial_refactoring) -->
+    <% @users.each do |user| %>
+      <li>
+        <%= gravatar_for user, size: 50 %>
+        <%= link_to user.name, user %>
+      </li>
+    <% end %>
+  <% end %>
+</ul>
+
+<%= will_paginate %>

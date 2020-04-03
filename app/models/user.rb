@@ -12,7 +12,7 @@ class User < ApplicationRecord
                     uniqueness: { case_sensitive: false }
   # L6.37: パスワードのハッシュ化など
   has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }
+  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true # L10.13: allow_nil
 
   
   # 8.21: fixture向けのdigestメソッドを追加する
