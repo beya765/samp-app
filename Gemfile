@@ -11,6 +11,7 @@ gem 'faker',        '1.7.3'
 # L10.44 ページネーション
 gem 'will_paginate',           '3.1.6'
 gem 'bootstrap-will_paginate', '1.0.0'
+gem 'rails_12factor', group: :production
 gem 'puma',         '3.9.1'
 gem 'sass-rails',   '5.0.6'
 gem 'uglifier',     '3.2.0'
@@ -41,7 +42,6 @@ end
 
 group :production do
   gem 'pg', '0.20.0'
-  gem 'rails_12factor', group: :production
 end
 
 # Windows環境ではtzinfo-dataというgemを含める必要があります
