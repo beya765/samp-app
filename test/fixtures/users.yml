@@ -7,27 +7,45 @@ michael:
   email: michael@example.com
   password_digest: <%= User.digest('password') %> 
   admin: true
+  activated: true
+  activated_at: <%= Time.zone.now %>
 
 # L10.23: fixtureファイルに２人目のユーザーを追加
 archer:
   name: Sterling Archer
   email: duchess@example.gov
   password_digest: <%= User.digest('password') %>
+  activated: true
+  activated_at: <%= Time.zone.now %>
 
 # L10.47: fixtureにさらに30人のユーザーを追加する(+名前付きユーザー2人)
 lana:
   name: Lana Kane
   email: hands@example.gov
   password_digest: <%= User.digest('password') %>
+  activated: true
+  activated_at: <%= Time.zone.now %>
 
 malory:
   name: Malory Archer
   email: boss@example.gov
   password_digest: <%= User.digest('password') %>
+  activated: true
+  activated_at: <%= Time.zone.now %>
+
+# 有効化されていないテスト用のユーザ
+hoge:
+  name: Hoge
+  email: hoge@example.gov
+  password_digest: <%= User.digest('password') %>
+  activated: false
+  activated_at: nil
 
 <% 30.times do |n| %>
 user_<%= n %>:
   name:  <%= "User #{n}" %>
   email: <%= "user-#{n}@example.com" %>
   password_digest: <%= User.digest('password') %>
+  activated: true
+  activated_at: <%= Time.zone.now %>
 <% end %>

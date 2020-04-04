@@ -10,9 +10,13 @@ class UsersController < ApplicationController
 
   # L10.35
   def index
-    # L10.46: Usersをページネート
-    @users = User.paginate(page: params[:page])
-    # ---L10.46より置き換え:@users = User.all
+    @users = User.where(activated: true).paginate(page: params[:page])
+
+    # ---L11.40より置き換え
+    # ---# L10.46: Usersをページネート
+    # ---@users = User.paginate(page: params[:page])
+
+    # ---L10.46より置き換え: @users = User.all
   end
 
   def new
@@ -22,18 +26,25 @@ class UsersController < ApplicationController
   # L7.5
   def show
     @user = User.find(params[:id])
+    redirect_to root_url and return unless @user.activated? # L11.40
     # debugger # 使用方法(https://railstutorial.jp/chapters/sign_up?version=5.1#sec-debugger)
   end
 
   # L7.18
   def create
-    # ユーザ登録で送られてきたPOSTデータの内容をprivate内で選定
+    # ユーザ登録で送られてきたPOSTデータの内容をprivate内のuser_paramsで選定
     @user = User.new(user_params)
     if @user.save
-      log_in @user # L8.25: ユーザー登録中にログインする
-      flash[:success] = "userコントローラー: Welcome to the Sample App!!"
-      # L7.28: redirect_to user_url(@user)と等価
-      redirect_to @user
+      # L11.23: ユーザー登録にアカウント有効化を追加
+      @user.send_activation_email # L11.36: ユーザーモデルオブジェクトからメールを送信する
+      flash[:info] = "Please check your email to activate your account."
+      redirect_to root_url
+
+      # ---アカウント有効化処理に伴い修正
+      # ---log_in @user # L8.25: ユーザー登録中にログインする
+      # ---flash[:success] = "userコントローラー: Welcome to the Sample App!!"
+      # ---# L7.28: redirect_to user_url(@user)と等価
+      # ---redirect_to @user
     else
       render 'new'
     end

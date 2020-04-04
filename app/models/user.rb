@@ -1,7 +1,9 @@
 class User < ApplicationRecord
-  attr_accessor :remember_token # L9.3: 仮想属性
-  # L6.32: DB保存前にemail属性を小文字に変換
-  before_save { email.downcase! }
+  attr_accessor :remember_token, :activation_token # L9.3/11.3: 仮想属性
+  # ---L6.32: DB保存前にemail属性を小文字に変換
+  # ---before_save { email.downcase! }
+  before_save :downcase_email # L11.3: メソッド参照が推奨のため修正
+  before_create :create_activation_digest # L11.3: Userオブジェクト作成前に呼び出される
   # L6.9: validatesメソッドにpresence: trueオプションハッシュを渡す。
   # メソッドの最期の引数としてハッシュを渡す場合、{}はなくてもいい
   validates :name, presence: true, length: { maximum: 50 }
@@ -35,16 +37,49 @@ class User < ApplicationRecord
     update_attribute(:remember_digest, User.digest(remember_token))
   end
 
-  # L9.6: 渡されたトークンがダイジェストと一致したらtrueを返す
-  # (L9.3のattr_accessor :remember_tokenとは異なり、ローカル変数)
-  def authenticated?(remember_token)
-    # self.remember_digest と同じ。
-    return false if remember_digest.nil? # L9.19: ダイジェストが存在しない場合に対応
-    BCrypt::Password.new(remember_digest).is_password?(remember_token)
+  # L11.26の抽象化に伴い、修正(https://railstutorial.jp/chapters/account_activation?version=5.1#sec-generalizing_the_authenticated_method)
+  # ---# L9.6: 渡されたトークンがダイジェストと一致したらtrueを返す
+  # ---# (L9.3のattr_accessor :remember_tokenとは異なり、ローカル変数)
+  # ---def authenticated?(remember_token)
+  #   ---# self.remember_digest と同じ。
+  #   ---return false if remember_digest.nil? # L9.19: ダイジェストが存在しない場合に対応
+  #   ---BCrypt::Password.new(remember_digest).is_password?(remember_token)
+  # ---end
+
+  # L11.26: トークンが抽象化(send)ダイジェストと一致したらtrueを返す
+  def authenticated?(attribute, token)
+    # sendメソッドに渡す引数(attribute: remember or activation)で処理を振り分け
+    digest = send("#{attribute}_digest")
+    return false if digest.nil?
+    BCrypt::Password.new(digest).is_password?(token)
   end
 
   # L9.11: ユーザーのログイン情報を破棄する
   def forget
     update_attribute(:remember_digest, nil)
   end
+
+  # L11.35: Userモデルにユーザー有効化メソッドを追加する
+
+  # アカウントを有効化する
+  def activate
+    update_columns(activated: true, activated_at: Time.zone.now)
+  end
+
+  # 有効化用のメールを送信する
+  def send_activation_email
+    UserMailer.account_activation(self).deliver_now
+  end
+
+  private
+    # メールアドレスをすべて小文字にする
+    def downcase_email
+      email.downcase!
+    end
+
+    # 有効化トークンとダイジェストを作成および代入する
+    def create_activation_digest
+      self.activation_token = User.new_token
+      self.activation_digest = User.digest(activation_token)
+    end
 end

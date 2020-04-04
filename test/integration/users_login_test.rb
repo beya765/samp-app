@@ -5,6 +5,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     # L8.23: usersはfixtureのファイル名users.yml、
     # :michaelというシンボルはユーザーを参照するためのキーを現す。
     @user = users(:michael)
+    @non_activated_user = users(:hoge)
   end
 
   # L8.9: フラッシュメッセージの残留をキャッチするテスト
@@ -63,5 +64,10 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     # クッキーを削除してログイン
     log_in_as(@user, remember_me: '0')
     assert_empty cookies['remember_token']
+  end
+
+  test "login as non-activated user" do
+    log_in_as(@non_activated_user)
+    assert_redirected_to root_url
   end
 end

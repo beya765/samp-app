@@ -16,4 +16,6 @@ Rails.application.routes.draw do
   delete 'logout', to: 'sessions#destroy'
   # L7.3: Usersリソースを追加(https://railstutorial.jp/chapters/sign_up?version=5.1#sec-a_users_resource)
   resources :users
+  # L11.1: アカウント有効化に使うリソース (editアクション) を追加
+  resources :account_activations, only: [:edit]
 end
