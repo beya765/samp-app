@@ -64,7 +64,7 @@ Rails.application.configure do
   # L11.41: Railsのproduction環境でSendGridを使う設定(heroku config)
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
-  host = 'sampapp-0324.herokuapp.com'
+  host = 'https://sampapp-0324.herokuapp.com/'
   config.action_mailer.default_url_options = { host: host }
   ActionMailer::Base.smtp_settings = {
     :address        => 'smtp.sendgrid.net',
