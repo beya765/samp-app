@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'password_resets/new'
+
+  get 'password_resets/edit'
+
   # root_path('/'), root_url('http://www.example.com/')の文字列を返すメソッドが使える。
   # 基本的には_path書式を、リダイレクト時に_urlを使う。
   root 'static_pages#home'  
@@ -18,4 +22,6 @@ Rails.application.routes.draw do
   resources :users
   # L11.1: アカウント有効化に使うリソース (editアクション) を追加
   resources :account_activations, only: [:edit]
+  # L12.1: パスワード再設定用リソースを追加
+  resources :password_resets, only: [:new, :create, :edit, :update]
 end
