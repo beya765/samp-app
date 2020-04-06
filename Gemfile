@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails',        '5.1.6'
 # L5.5: https://railstutorial.jp/chapters/filling_in_the_layout?version=5.1#sec-custom_css
-gem 'bootstrap-sass', '3.3.7' 
+gem 'bootstrap-sass', '3.4.1' 
 # L6.36: パスワードを適切にハッシュ化
 gem 'bcrypt',         '3.1.12'
 # L10.42: 実際にいそうなユーザー名を作成する
