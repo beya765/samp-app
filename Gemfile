@@ -10,7 +10,7 @@ gem 'bcrypt',         '3.1.12'
 gem 'faker',        '1.7.3'
 # L13.58: GemfileにCarrierWaveを追加する
 gem 'carrierwave',             '1.2.2' # 画像アップローダー
-gem 'mini_magick',             '4.7.0' # 画像リサイズ
+gem 'mini_magick',             '4.9.4' # 画像リサイズ
 # L10.44 ページネーション
 gem 'will_paginate',           '3.1.6'
 gem 'bootstrap-will_paginate', '1.0.0'
