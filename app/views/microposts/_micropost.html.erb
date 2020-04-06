@@ -1,0 +1,17 @@
+<!-- L13.22: 1つのマイクロポストを表示するパーシャル -->
+<li id="micropost-<%= micropost.id %>%">
+  <%= link_to gravatar_for(micropost.user, size: 50), micropost.user %>
+  <span class="user"><%= link_to micropost.user.name, micropost.user %></span>
+  <span class="content"><%= micropost.content %></span>
+  <!-- L13.62: マイクロポストの画像表示を追加する 
+        picture?メソッド: 論理値を返す。CarrierWaveが自動的に生成したメソッド -->
+  <%= image_tag micropost.picture.url if micropost.picture? %>
+  <span class="timestamp">
+    Posted <%= time_ago_in_words(micropost.created_at) %> ago.
+    <!-- L13.51: マイクロポストのパーシャルに削除リンクを追加する -->
+    <% if current_user?(micropost.user) %>
+      <%= link_to "delete", micropost, method: :delete,
+                                        data: { confirm: "You sure?" } %>
+    <% end %>
+  </span>
+</li>

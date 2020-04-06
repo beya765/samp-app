@@ -2,13 +2,15 @@
   @user.errors.any?: empty?の逆で要素が一つでもあればtrue
   pluralize: 英語専用のテキストヘルパー、複数形に対応
 -->
-<% if @user.errors.any? %>
+<!-- L13.41: Userオブジェクト以外でも動作するようにerror_messagesパーシャルを更新
+              @user.errorsをobject.errorsへ -->
+<% if object.errors.any? %>
   <div id="error_explanation">
     <div class="alert alert-danger">
-      The form contains <%= pluralize(@user.errors.count, "error") %>
+      The form contains <%= pluralize(object.errors.count, "error") %>
     </div>
     <ul>
-      <% @user.errors.full_messages.each do |msg| %>
+      <% object.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
     </ul>

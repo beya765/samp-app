@@ -8,7 +8,7 @@
 <!-- https://railstutorial.jp/chapters/sign_up?version=5.1#sec-a_working_form -->
 <%= form_for(@user, url: yield(:url)) do |f| %>
   <!-- L7.20: ユーザー登録失敗時にエラーメッセージが表示されるようにする -->
-  <%= render 'shared/error_messages', object: @user %>
+  <%= render 'shared/error_messages', object: f.object %>
 
   <%= f.label :name %>
   <%= f.text_field :name, class: 'form-control' %>

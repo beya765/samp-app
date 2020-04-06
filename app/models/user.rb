@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+  # L13.11: ユーザーがマイクロポストを複数所有する(has_many)関連付け
+  # L13.19: マイクロポストは、その所有者 (ユーザー) と一緒に破棄されることを保証する
+  has_many :microposts, dependent: :destroy
   attr_accessor :remember_token, :activation_token, :reset_token # L9.3/11.3/L12.6: 仮想属性
   # ---L6.32: DB保存前にemail属性を小文字に変換
   # ---before_save { email.downcase! }
@@ -88,6 +91,13 @@ class User < ApplicationRecord
   def password_reset_expired?
     # パスワード再設定メールの送信時刻が、現在時刻より2時間以上前 (早い) の場合
     reset_sent_at < 2.hours.ago 
+  end
+
+  # L13.46: マイクロポストのステータスフィードを実装するための準備
+  # 試作feedの定義
+  # 完全な実装は次章の「ユーザーをフォローする」を参照
+  def feed
+    Micropost.where("user_id = ?", id)
   end
 
   private

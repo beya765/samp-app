@@ -5,7 +5,7 @@
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
     <%= form_for(@user, url: password_reset_path(params[:id])) do |f| %>
-      <%= render 'shared/error_messages' %>
+      <%= render 'shared/error_messages', object: f.object %>
 
       <!-- 以前の"<f.hidden_field :email, @user.email>"との違いは今回の
         フォームタグヘルパーはメールアドレスがparams[:email]に保存されるが

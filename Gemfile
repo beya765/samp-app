@@ -8,6 +8,9 @@ gem 'bcrypt',         '3.1.12'
 # L10.42: 実際にいそうなユーザー名を作成する
 # (本来は開発環境以外では使わないが、今回は本番環境でも適用)
 gem 'faker',        '1.7.3'
+# L13.58: GemfileにCarrierWaveを追加する
+gem 'carrierwave',             '1.2.2' # 画像アップローダー
+gem 'mini_magick',             '4.7.0' # 画像リサイズ
 # L10.44 ページネーション
 gem 'will_paginate',           '3.1.6'
 gem 'bootstrap-will_paginate', '1.0.0'
@@ -42,6 +45,7 @@ end
 
 group :production do
   gem 'pg', '0.20.0'
+  gem 'fog', '1.42' # L13.58: 本番環境で画像をアップロード
 end
 
 # Windows環境ではtzinfo-dataというgemを含める必要があります

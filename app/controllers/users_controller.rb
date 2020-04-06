@@ -26,6 +26,8 @@ class UsersController < ApplicationController
   # L7.5
   def show
     @user = User.find(params[:id])
+    # L13.23: paginateはマイクロポストの関連付けを通して、必要なページを引き出してくれる
+    @microposts = @user.microposts.paginate(page: params[:page]) 
     redirect_to root_url and return unless @user.activated? # L11.40
     # debugger # 使用方法(https://railstutorial.jp/chapters/sign_up?version=5.1#sec-debugger)
   end
@@ -86,15 +88,16 @@ class UsersController < ApplicationController
 
     # beforeアクション
 
-    # L10.15: ログイン済みユーザーかどうか確認
-    def logged_in_user
-      # unless: if文の逆。つまりfalse(未ログイン)の場合の処理
-      unless logged_in?
-        store_location # L10.31: アクセス先URL保存
-        flash[:danger] = "Please log in."
-        redirect_to login_url
-      end
-    end
+    # L13.33にてApplicationコントローラーに移動
+    # ---# L10.15: ログイン済みユーザーかどうか確認
+    # ---def logged_in_user
+    #   ---# unless: if文の逆。つまりfalse(未ログイン)の場合の処理
+    #   ---unless logged_in?
+    #     ---store_location # L10.31: アクセス先URL保存
+    #     ---flash[:danger] = "Please log in."
+    #     ---redirect_to login_url
+    #   ---end
+    # ---end
 
     # L10.25: 正しいユーザーかどうか確認
     def correct_user
