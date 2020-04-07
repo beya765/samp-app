@@ -2,6 +2,21 @@ class User < ApplicationRecord
   # L13.11: ユーザーがマイクロポストを複数所有する(has_many)関連付け
   # L13.19: マイクロポストは、その所有者 (ユーザー) と一緒に破棄されることを保証する
   has_many :microposts, dependent: :destroy
+  # L14.2: 能動的関係に対して1対多 (has_many) の関連付けを実装する
+  has_many :active_relationships, class_name:  "Relationship",
+                                  foreign_key: "follower_id",
+                                  dependent:   :destroy
+  # L14.12: 受動的関係を使ってuser.followersを実装する
+  has_many :passive_relationships, class_name:  "Relationship",
+                                  foreign_key: "followed_id",
+                                  dependent:   :destroy
+  # L14.8: Userモデルにfollowingの関連付けを追加する(多対多)
+  # Railsはfollowingのシンボルを見て、relationshipsテーブルのfollowed_idを使って対象のユーザーを取得
+  # :sourceでfollowing配列の元はfollowed idの集合である」ということをRailsに伝えます。
+  # (followedsという配列名は英語として不適切なためfollowingを使用)
+  has_many :following, through: :active_relationships, source: :followed
+  has_many :followers, through: :passive_relationships, source: :follower # L14.12
+  
   attr_accessor :remember_token, :activation_token, :reset_token # L9.3/11.3/L12.6: 仮想属性
   # ---L6.32: DB保存前にemail属性を小文字に変換
   # ---before_save { email.downcase! }
@@ -93,11 +108,46 @@ class User < ApplicationRecord
     reset_sent_at < 2.hours.ago 
   end
 
-  # L13.46: マイクロポストのステータスフィードを実装するための準備
-  # 試作feedの定義
-  # 完全な実装は次章の「ユーザーをフォローする」を参照
+  # ---L13.46: マイクロポストのステータスフィードを実装するための準備
+  # ---L14.44: とりあえず動くフィードの実装
+  # ---L14.46: whereメソッド内の変数に、キーと値のペアを使う
+  # L14.47: フィードの最終的な実装
+  # ユーザーのステータスフィードを返す(Staticコントローラーのhomeアクションで使用)
   def feed
-    Micropost.where("user_id = ?", id)
+    # L13.46---Micropost.where("user_id = ?", id) # L14.44にて削除
+
+    # ---following_idsメソッド: has_many :followingの関連付けをしたときに
+    # ---Active Recordが自動生成したもの。フォローしているユーザーidの文字列をDBから取得
+    # ---User.first.following.map(&:id)のような形で取得したID群でDBからフォローユーザ達の
+    # ---マイクロポストを取り出す。(DBが2回呼び出されてしまう)
+    # L14.44---Micropost.where("user_id IN (?) OR user_id = ?", following_ids, id) # L14.46にて削除
+
+    # L14.46---Micropost.where("user_id IN (:following_ids) OR user_id = :user_id",
+    #     ---following_ids: following_ids, user_id: id) # L14.47にて削除
+
+    # following_idsをSQLに置き換える(効率的にデータを取得)
+    following_ids = "SELECT followed_id FROM relationships
+                    WHERE follower_id = :user_id"
+    Micropost.where("user_id IN (#{following_ids})
+                    OR user_id = :user_id", user_id: id) # id: self.id
+  end
+
+  # L14.10: "following" 関連のメソッド
+
+  # ユーザーをフォローする
+  def follow(other_user)
+    # self.user.following
+    following << other_user
+  end
+
+  # ユーザーのフォローを解除する
+  def unfollow(other_user)
+    active_relationships.find_by(followed_id: other_user.id).destroy
+  end
+
+  # 現在のユーザーがフォローしていたらtrueを返す
+  def following?(other_user)
+    following.include?(other_user)
   end
 
   private

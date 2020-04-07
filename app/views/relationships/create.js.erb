@@ -1,0 +1,4 @@
+<!-- L14.38: JavaScriptと埋め込みRubyを使ってフォローの関係性を作成する -->
+<!-- unfollowパーシャルを呼び出し、ボタンやカウントなどを更新(フォローしたのでUnfollowボタンに切り替える必要がある) -->
+$("#follow_form").html("<%= escape_javascript(render('users/unfollow')) %>");
+$("#followers").html('<%= @user.followers.count %>');

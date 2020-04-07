@@ -1,0 +1,4 @@
+<!-- L14.39: Ruby JavaScript (RJS) を使ってフォローの関係性を削除する -->
+<!-- followパーシャルを呼び出し、ボタンやカウントなどを更新(フォロー解除したのでFollowボタンに切り替える必要がある) -->
+$("#follow_form").html("<%= escape_javascript(render('users/follow')) %>");
+$("#followers").html('<%= @user.followers.count %>');

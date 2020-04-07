@@ -1,0 +1,18 @@
+# L14.6: Relationship用のfixtureを空にする(error対策)
+# L14.28: following/followerをテストするためのリレーションシップ用fixture
+
+one:
+  follower: michael
+  followed: lana
+
+two:
+  follower: michael
+  followed: malory
+
+three:
+  follower: lana
+  followed: michael
+
+four:
+  follower: archer
+  followed: michael

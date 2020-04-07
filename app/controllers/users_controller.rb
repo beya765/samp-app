@@ -2,7 +2,8 @@ class UsersController < ApplicationController
   # L10.15: beforeフィルターにlogged_in_user追加
   # L10.35: indexアクションにはログインを要求する
   # L10.58: 実際に動作するdestroyアクションを追加する
-  before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
+  before_action :logged_in_user, only: [:index, :edit, :update, :destroy,
+                                        :following, :followers] # L14.25
   # L10.25: beforeフィルターを使って編集/更新ページを保護
   before_action :correct_user, only: [:edit, :update]
   # L10.59: beforeフィルターでdestroyアクションを管理者だけに限定する
@@ -76,6 +77,22 @@ class UsersController < ApplicationController
     User.find(params[:id]).destroy
     flash[:success] = "User deleted"
     redirect_to users_url
+  end
+
+  # L14.25: followingアクションとfollowersアクション
+
+  def following
+    @title = "Following"
+    @user = User.find(params[:id])
+    @users = @user.following.paginate(page: params[:page])
+    render 'show_follow'
+  end
+
+  def followers
+    @title = "Followers"
+    @user  = User.find(params[:id])
+    @users = @user.followers.paginate(page: params[:page])
+    render 'show_follow'
   end
 
   private

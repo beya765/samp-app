@@ -1,8 +1,4 @@
 Rails.application.routes.draw do
-  get 'password_resets/new'
-
-  get 'password_resets/edit'
-
   # root_path('/'), root_url('http://www.example.com/')の文字列を返すメソッドが使える。
   # 基本的には_path書式を、リダイレクト時に_urlを使う。
   root 'static_pages#home'  
@@ -18,12 +14,20 @@ Rails.application.routes.draw do
   get 'login', to: 'sessions#new'
   post 'login', to: 'sessions#create'
   delete 'logout', to: 'sessions#destroy'
+
   # L7.3: Usersリソースを追加(https://railstutorial.jp/chapters/sign_up?version=5.1#sec-a_users_resource)
-  resources :users
+  # L14.15: Usersコントローラにfollowingアクションとfollowersアクションを追加する
+  resources :users do
+    member do # collection にすると全てのメンバー表示(/users/following(followers))
+      get :following, :followers # /users/1/following(followers)に対応
+    end
+  end
   # L11.1: アカウント有効化に使うリソース (editアクション) を追加
   resources :account_activations, only: [:edit]
   # L12.1: パスワード再設定用リソースを追加
   resources :password_resets,     only: [:new, :create, :edit, :update]
   # L13.30: マイクロポストリソースのルーティング
   resources :microposts,          only: [:create, :destroy]
+  # L14.20: Relationshipリソース用のルーティングを追加する
+  resources :relationships,       only: [:create, :destroy]
 end

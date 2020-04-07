@@ -1,0 +1,7 @@
+<!-- L14.22: ユーザーをフォロー解除するフォーム -->
+<!-- L14.35: Ajaxを使ったフォロー解除フォーム remote: true追加のみ
+              非同期リクエストを送信する -->
+<%= form_for(current_user.active_relationships.find_by(followed_id: @user.id),
+              html: { method: :delete }, remote: true) do |f| %>
+  <%= f.submit "Unfollow", class: "btn" %>
+<% end %>

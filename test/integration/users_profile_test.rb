@@ -15,6 +15,9 @@ class UsersProfileTest < ActionDispatch::IntegrationTest
     assert_select 'h1', text: @user.name
     # h1の内側にgravatarクラスが付与されたimgタグがあるか
     assert_select 'h1>img.gravatar'
+    # フォロー/フォロワー数
+    assert_match @user.following.count.to_s, response.body
+    assert_match @user.followers.count.to_s, response.body
     # HTML全体(response.body)の中にマイクロポストの投稿数が含まれていることをチェック
     assert_match @user.microposts.count.to_s, response.body
     assert_select 'div.pagination', count: 1
