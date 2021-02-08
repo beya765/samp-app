@@ -9,7 +9,7 @@ gem 'bcrypt',         '3.1.12'
 # (本来は開発環境以外では使わないが、今回は本番環境でも適用)
 gem 'faker',        '1.7.3'
 # L13.58: GemfileにCarrierWaveを追加する
-gem 'carrierwave',             '1.2.2' # 画像アップローダー
+gem 'carrierwave',             '1.3.2' # 画像アップローダー
 gem 'mini_magick',             '4.7.0' # 画像リサイズ
 # L10.44 ページネーション
 gem 'will_paginate',           '3.1.6'
